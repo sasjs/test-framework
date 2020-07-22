@@ -12,12 +12,12 @@ export const AppContext = createContext<{
   sasJsConfig: null,
   isLoggedIn: false,
   setIsLoggedIn: (null as unknown) as (value: boolean) => void,
-  adapter: (null as unknown) as SASjs,
+  adapter: (null as unknown) as SASjs
 });
 
 export const AppProvider = (props: { children: ReactNode }) => {
   const [config, setConfig] = useState<{ sasJsConfig: any }>({
-    sasJsConfig: null,
+    sasJsConfig: null
   });
 
   const [adapter, setAdapter] = useState<SASjs>((null as unknown) as SASjs);
@@ -44,7 +44,7 @@ export const AppProvider = (props: { children: ReactNode }) => {
         sasJsConfig: config.sasJsConfig,
         isLoggedIn,
         setIsLoggedIn,
-        adapter,
+        adapter
       }}
     >
       {props.children}

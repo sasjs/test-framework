@@ -1,61 +1,61 @@
-import React, { useEffect, useState, ReactElement } from 'react'
-import TestSuiteComponent from './TestSuite'
-import TestSuiteCard from './TestSuiteCard'
-import { TestSuite, Test } from '../types'
-import './TestSuiteRunner.scss'
+import React, { useEffect, useState, ReactElement } from "react";
+import TestSuiteComponent from "./TestSuite";
+import TestSuiteCard from "./TestSuiteCard";
+import { TestSuite, Test } from "../types";
+import "./TestSuiteRunner.scss";
 
 interface TestSuiteRunnerProps {
-  testSuites: TestSuite[]
+  testSuites: TestSuite[];
 }
 const TestSuiteRunner = (
   props: TestSuiteRunnerProps
 ): ReactElement<TestSuiteRunnerProps> => {
-  const testSuites = props.testSuites || []
-  const [runTests, setRunTests] = useState(false)
+  const testSuites = props.testSuites || [];
+  const [runTests, setRunTests] = useState(false);
   const [completedTestSuites, setCompletedTestSuites] = useState<
     {
-      name: string
+      name: string;
       completedTests: {
-        test: Test
-        result: boolean
-        error: Error | null
-        executionTime: number
-      }[]
+        test: Test;
+        result: boolean;
+        error: Error | null;
+        executionTime: number;
+      }[];
     }[]
-  >([])
+  >([]);
   const [currentTestSuite, setCurrentTestSuite] = useState<TestSuite | null>(
     (null as unknown) as TestSuite
-  )
+  );
 
   useEffect(() => {
     if (testSuites && testSuites.length) {
-      setCurrentTestSuite(testSuites[0])
+      setCurrentTestSuite(testSuites[0]);
     }
-  }, [testSuites])
+  }, [testSuites]);
 
   useEffect(() => {
     if (runTests) {
-      setCompletedTestSuites([])
+      setCompletedTestSuites([]);
       if (testSuites && testSuites.length) {
-        setCurrentTestSuite(testSuites[0])
+        setCurrentTestSuite(testSuites[0]);
       }
     }
-  }, [runTests, testSuites])
+  }, [runTests, testSuites]);
 
   return (
     <div>
-      <div className='button-container'>
+      <div className="button-container">
         <button
-          className={runTests ? 'submit-button disabled' : 'submit-button'}
+          className={runTests ? "submit-button disabled" : "submit-button"}
           onClick={() => setRunTests(true)}
           disabled={runTests}
         >
           {runTests ? (
             <div>
-              <div className='loading-spinner'></div>Running tests...
+              <div className="loading-spinner"></div>Running tests...
             </div>
           ) : (
-            'Run tests!'
+            "Run tests!"
           )}
         </button>
       </div>
@@ -66,7 +66,7 @@ const TestSuiteRunner = (
             tests={completedTestSuite.completedTests}
             name={completedTestSuite.name}
           />
-        )
+        );
       })}
       {currentTestSuite && runTests && (
         <TestSuiteComponent
@@ -74,34 +74,34 @@ const TestSuiteRunner = (
           onCompleted={(
             name,
             completedTests: {
-              test: Test
-              result: boolean
-              error: Error | null
-              executionTime: number
+              test: Test;
+              result: boolean;
+              error: Error | null;
+              executionTime: number;
             }[]
           ) => {
-            const currentIndex = testSuites.indexOf(currentTestSuite)
+            const currentIndex = testSuites.indexOf(currentTestSuite);
             const nextIndex =
-              currentIndex < testSuites.length - 1 ? currentIndex + 1 : -1
+              currentIndex < testSuites.length - 1 ? currentIndex + 1 : -1;
             if (nextIndex >= 0) {
-              setCurrentTestSuite(testSuites[nextIndex])
+              setCurrentTestSuite(testSuites[nextIndex]);
             } else {
-              setCurrentTestSuite(null)
+              setCurrentTestSuite(null);
             }
             const newCompletedTestSuites = [
               ...completedTestSuites,
               { name, completedTests }
-            ]
-            setCompletedTestSuites(newCompletedTestSuites)
+            ];
+            setCompletedTestSuites(newCompletedTestSuites);
 
             if (newCompletedTestSuites.length === testSuites.length) {
-              setRunTests(false)
+              setRunTests(false);
             }
           }}
         />
       )}
     </div>
-  )
-}
+  );
+};
 
-export default TestSuiteRunner
+export default TestSuiteRunner;
