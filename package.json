@@ -10,6 +10,14 @@
   "engines": {
     "node": ">=10"
   },
+  "release": {
+    "branches": [
+      "main"
+    ]
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "microbundle-crl --no-compress --css-modules false --format modern,cjs",
     "start": "microbundle-crl watch --no-compress --css-modules false --format modern,cjs",
