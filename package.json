@@ -4,7 +4,7 @@
   "description": "A framework for running tests against a SAS server using SASjs",
   "author": "krishna-acondy",
   "license": "MIT",
-  "repository": "/sasjs/test-framework",
+  "repository": "https://github.com/sasjs/test-framework",
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
   "source": "src/index.tsx",
@@ -12,8 +12,8 @@
     "node": ">=10"
   },
   "scripts": {
-    "build": "microbundle-crl --no-compress --format modern,cjs",
-    "start": "microbundle-crl watch --no-compress --format modern,cjs",
+    "build": "microbundle-crl --no-compress --css-modules false --format modern,cjs",
+    "start": "microbundle-crl watch --no-compress --css-modules false --format modern,cjs",
     "prepare": "run-s build",
     "test": "run-s test:unit test:lint test:build",
     "test:build": "run-s build",
@@ -27,6 +27,7 @@
     "react": "^16.0.0"
   },
   "devDependencies": {
+    "@sasjs/adapter": "^1.0.6",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
