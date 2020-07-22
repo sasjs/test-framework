@@ -1,6 +1,5 @@
 {
   "name": "@sasjs/test-framework",
-  "version": "1.0.0",
   "description": "A framework for running tests against a SAS server using SASjs",
   "author": "krishna-acondy",
   "license": "MIT",
