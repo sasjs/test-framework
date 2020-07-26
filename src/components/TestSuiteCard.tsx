@@ -11,17 +11,21 @@ interface TestSuiteCardProps {
     error: Error | null;
     executionTime: number;
   }[];
+  onRerun: () => void;
 }
 const TestSuiteCard = (
   props: TestSuiteCardProps
 ): ReactElement<TestSuiteCardProps> => {
-  const { name, tests } = props;
+  const { name, tests, onRerun } = props;
   const overallStatus = tests.map((t) => t.result).reduce((x, y) => x && y);
 
   return (
     <div className="test-suite">
       <div className={`test-suite-name ${overallStatus ? "passed" : "failed"}`}>
         {name}
+        <button className="re-run-button" onClick={onRerun}>
+          Re-run
+        </button>
       </div>
       {tests.map((completedTest, index) => {
         const { test, result, error, executionTime } = completedTest;
