@@ -8,6 +8,7 @@ interface TestProps {
   afterTest?: (...args: any) => Promise<any>;
   test: (context: any) => Promise<any>;
   assertion: (...args: any) => boolean;
+  onRerun: () => void;
   onCompleted: (payload: {
     result: boolean;
     error: Error | null;
@@ -29,6 +30,7 @@ const Test = (props: TestProps): ReactElement<TestProps> => {
     afterTest,
     assertion,
     onCompleted,
+    onRerun,
     context
   } = props;
   const beforeTestFunction = beforeTest ? beforeTest : () => Promise.resolve();
@@ -68,6 +70,7 @@ const Test = (props: TestProps): ReactElement<TestProps> => {
   return (
     <TestCard
       title={title}
+      onRerun={onRerun}
       description={description}
       status={getStatus(isRunning, isPassed)}
       error={null}

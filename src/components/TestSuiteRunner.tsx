@@ -1,40 +1,28 @@
-import React, { useEffect, useState, ReactElement } from "react";
+import React, { useState, ReactElement } from "react";
 import TestSuiteComponent from "./TestSuite";
-import { TestSuite, Test } from "../types";
+import { TestSuite } from "../types";
 import "./TestSuiteRunner.scss";
 
 interface TestSuiteRunnerProps {
   testSuites: TestSuite[];
 }
+
 const TestSuiteRunner = (
   props: TestSuiteRunnerProps
 ): ReactElement<TestSuiteRunnerProps> => {
-  const testSuites = props.testSuites || [];
+  let testSuites = props.testSuites || [];
   const [runTests, setRunTests] = useState(false);
-  const [completedTestSuites, setCompletedTestSuites] = useState<
-    {
-      name: string;
-      completedTests: {
-        test: Test;
-        result: boolean;
-        error: Error | null;
-        executionTime: number;
-      }[];
-    }[]
-  >([]);
-
-  useEffect(() => {
-    if (runTests) {
-      setCompletedTestSuites([]);
-    }
-  }, [runTests, testSuites]);
+  const [completedTestSuiteCount, setCompletedTestSuiteCount] = useState(0);
 
   return (
     <div>
       <div className="button-container">
         <button
           className={runTests ? "submit-button disabled" : "submit-button"}
-          onClick={() => setRunTests(true)}
+          onClick={() => {
+            setRunTests(true);
+            setCompletedTestSuiteCount(0);
+          }}
           disabled={runTests}
         >
           {runTests ? (
@@ -52,22 +40,10 @@ const TestSuiteRunner = (
             key={index}
             {...testSuite}
             isRunning={runTests}
-            onCompleted={(
-              name,
-              completedTests: {
-                test: Test;
-                result: boolean;
-                error: Error | null;
-                executionTime: number;
-              }[]
-            ) => {
-              const newCompletedTestSuites = [
-                ...completedTestSuites,
-                { name, completedTests }
-              ];
-              setCompletedTestSuites(newCompletedTestSuites);
+            onCompleted={() => {
+              setCompletedTestSuiteCount((c) => c + 1);
 
-              if (newCompletedTestSuites.length === testSuites.length) {
+              if (completedTestSuiteCount + 1 === testSuites.length) {
                 setRunTests(false);
               }
             }}

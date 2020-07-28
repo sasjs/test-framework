@@ -12,11 +12,12 @@ interface TestSuiteCardProps {
     executionTime: number;
   }[];
   onRerun: () => void;
+  onRerunTest: (test: Test) => void;
 }
 const TestSuiteCard = (
   props: TestSuiteCardProps
 ): ReactElement<TestSuiteCardProps> => {
-  const { name, tests, onRerun } = props;
+  const { name, tests, onRerun, onRerunTest } = props;
   const overallStatus = tests.map((t) => t.result).reduce((x, y) => x && y);
 
   return (
@@ -34,6 +35,7 @@ const TestSuiteCard = (
           <TestCard
             key={index}
             title={title}
+            onRerun={() => onRerunTest(test)}
             description={description}
             status={result === true ? "passed" : "failed"}
             error={error}
