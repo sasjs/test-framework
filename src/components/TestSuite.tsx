@@ -11,20 +11,13 @@ interface TestSuiteProps {
   isRunning: boolean;
   beforeAll?: (...args: any) => Promise<any>;
   afterAll?: (...args: any) => Promise<any>;
-  onCompleted: (
-    name: string,
-    completedTests: {
-      test: Test;
-      result: boolean;
-      error: Error | null;
-      executionTime: number;
-    }[]
-  ) => void;
+  onCompleted: () => void;
 }
 const TestSuite = (props: TestSuiteProps): ReactElement<TestSuiteProps> => {
   const { name, tests, isRunning, beforeAll, afterAll, onCompleted } = props;
   const [context, setContext] = useState<any>(null);
   const [running, setRunning] = useState<boolean>(false);
+  const [isSingleTest, setIsSingleTest] = useState<boolean>(false);
   const [completedTests, setCompletedTests] = useState<
     {
       test: Test;
@@ -60,6 +53,15 @@ const TestSuite = (props: TestSuiteProps): ReactElement<TestSuiteProps> => {
       <TestSuiteCard
         tests={completedTests}
         name={name}
+        onRerunTest={(test: Test) => {
+          const newCompleteTests = completedTests.filter(
+            (t) => t.test !== test
+          );
+          setCompletedTests(newCompleteTests);
+          setCurrentTest(test);
+          setRunning(true);
+          setIsSingleTest(true);
+        }}
         onRerun={() => {
           setCompletedTests([]);
           setRunning(true);
@@ -83,34 +85,43 @@ const TestSuite = (props: TestSuiteProps): ReactElement<TestSuiteProps> => {
           <TestComponent
             {...currentTest}
             context={context}
+            onRerun={() => {
+              const newCompleteTests = completedTests.filter(
+                (t) => t.test.title !== currentTest.title
+              );
+              setCompletedTests(newCompleteTests);
+              setCurrentTest(currentTest);
+            }}
             onCompleted={(completedTest) => {
               const newCompleteTests = [
-                ...completedTests,
                 {
                   test: currentTest,
                   result: completedTest.result,
                   error: completedTest.error,
                   executionTime: completedTest.executionTime
-                }
+                },
+                ...completedTests
               ];
               setCompletedTests(newCompleteTests);
-              const currentIndex = tests.indexOf(currentTest);
-              const nextIndex =
-                currentIndex < tests.length - 1 ? currentIndex + 1 : -1;
-              if (nextIndex >= 0) {
-                setCurrentTest(tests[nextIndex]);
-              } else {
-                setCurrentTest(null);
+              if (!isSingleTest) {
+                const currentIndex = tests.indexOf(currentTest);
+                const nextIndex =
+                  currentIndex < tests.length - 1 ? currentIndex + 1 : -1;
+                if (nextIndex >= 0) {
+                  setCurrentTest(tests[nextIndex]);
+                } else {
+                  setCurrentTest(null);
+                }
               }
               if (newCompleteTests.length === tests.length) {
                 if (afterAll) {
                   afterAll().then(() => {
                     setRunning(false);
-                    onCompleted(name, newCompleteTests);
+                    onCompleted();
                   });
                 } else {
                   setRunning(false);
-                  onCompleted(name, newCompleteTests);
+                  onCompleted();
                 }
               }
             }}
@@ -122,6 +133,13 @@ const TestSuite = (props: TestSuiteProps): ReactElement<TestSuiteProps> => {
           return (
             <TestCard
               key={index}
+              onRerun={() => {
+                const newCompleteTests = completedTests.filter(
+                  (t) => t.test !== currentTest
+                );
+                setCompletedTests(newCompleteTests);
+                setCurrentTest(currentTest);
+              }}
               title={title}
               description={description}
               status={result === true ? "passed" : "failed"}

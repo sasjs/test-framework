@@ -7,13 +7,21 @@ interface TestCardProps {
   status: string;
   error: Error | null;
   executionTime?: number;
+  onRerun?: () => void;
 }
 const TestCard = (props: TestCardProps): ReactElement<TestCardProps> => {
-  const { title, description, status, error, executionTime } = props;
+  const { title, description, status, error, executionTime, onRerun } = props;
 
   return (
     <div className="test">
-      <code className="title">{title}</code>
+      <div>
+        <code className="title">{title}</code>
+        {!!onRerun && (
+          <button className="re-run-button" onClick={onRerun}>
+            Re-run
+          </button>
+        )}
+      </div>
       <span className="description">{description}</span>
       <span className="execution-time">
         {executionTime ? executionTime.toFixed(2) + "s" : ""}
