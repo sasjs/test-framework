@@ -1,7 +1,10 @@
 import React, { useState, ReactElement } from "react";
+import { Button, Icon } from "semantic-ui-react";
 import TestSuiteComponent from "./TestSuite";
 import { TestSuite } from "../types";
+import "semantic-ui-css/semantic.min.css";
 import "./TestSuiteRunner.scss";
+import ControlBar from "./ControlBar";
 
 interface TestSuiteRunnerProps {
   testSuites: TestSuite[];
@@ -16,40 +19,46 @@ const TestSuiteRunner = (
 
   return (
     <div>
+      <ControlBar />
       <div className="button-container">
-        <button
-          className={runTests ? "submit-button disabled" : "submit-button"}
-          onClick={() => {
-            setRunTests(true);
-            setCompletedTestSuiteCount(0);
-          }}
-          disabled={runTests}
-        >
-          {runTests ? (
-            <div>
-              <div className="loading-spinner"></div>Running tests...
-            </div>
-          ) : (
-            "Run tests!"
-          )}
-        </button>
-      </div>
-      {testSuites.map((testSuite, index) => {
-        return (
-          <TestSuiteComponent
-            key={index}
-            {...testSuite}
-            isRunning={runTests}
-            onCompleted={() => {
-              setCompletedTestSuiteCount((c) => c + 1);
-
-              if (completedTestSuiteCount + 1 === testSuites.length) {
-                setRunTests(false);
-              }
+        {runTests ? (
+          <Button primary loading size="massive">
+            Running tests...
+          </Button>
+        ) : (
+          <Button
+            icon
+            labelPosition="left"
+            primary
+            size="massive"
+            onClick={() => {
+              setRunTests(true);
+              setCompletedTestSuiteCount(0);
             }}
-          />
-        );
-      })}
+          >
+            <Icon name="play" />
+            Run Tests
+          </Button>
+        )}
+      </div>
+      <div className="test-suites">
+        {testSuites.map((testSuite, index) => {
+          return (
+            <TestSuiteComponent
+              key={index}
+              {...testSuite}
+              isRunning={runTests}
+              onCompleted={() => {
+                setCompletedTestSuiteCount((c) => c + 1);
+
+                if (completedTestSuiteCount + 1 === testSuites.length) {
+                  setRunTests(false);
+                }
+              }}
+            />
+          );
+        })}
+      </div>
     </div>
   );
 };
