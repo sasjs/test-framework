@@ -22,7 +22,11 @@
 
 .re-run-button {
   background-color: rgb(0, 115, 255);
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace !important;
+  line-height: 1 !important;
   color: #ffffff;
+  font-size: 14px !important;
   border: none;
   border-radius: 5px;
   padding: 5px;
