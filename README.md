@@ -13,13 +13,13 @@ npm install --save @sasjs/test-framework
 ## Usage
 
 ```tsx
-import React, { Component } from 'react'
+import React, { Component } from "react";
 
-import MyComponent from '@sasjs/test-framework'
+import TestSuiteRunner from "@sasjs/test-framework";
 
 class Example extends Component {
   render() {
-    return <MyComponent />
+    return <TestSuiteRunner testSuites={yourTestSuiteArray} />;
   }
 }
 ```
