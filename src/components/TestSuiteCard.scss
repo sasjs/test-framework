@@ -31,4 +31,10 @@
   border-radius: 5px;
   padding: 5px;
   margin-left: 10px;
+
+  &.disabled {
+    background-color: #787b93;
+    pointer-events: none;
+    cursor: not-allowed;
+  }
 }

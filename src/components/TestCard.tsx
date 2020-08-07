@@ -6,7 +6,7 @@ interface TestCardProps {
   description: string;
   status: string;
   error: Error | null;
-  executionTime?: number;
+  executionTime?: number | null;
   onRerun?: () => void;
 }
 const TestCard = (props: TestCardProps): ReactElement<TestCardProps> => {
@@ -17,8 +17,13 @@ const TestCard = (props: TestCardProps): ReactElement<TestCardProps> => {
       <div>
         <code className="title">{title}</code>
         {!!onRerun && (
-          <button className="re-run-button" onClick={onRerun}>
-            Re-run
+          <button
+            className={`re-run-button ${
+              status === "running" ? "disabled" : ""
+            }`}
+            onClick={onRerun}
+          >
+            {status === "running" ? "Running" : "Re-run"}
           </button>
         )}
       </div>

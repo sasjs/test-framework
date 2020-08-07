@@ -1,5 +1,6 @@
-import React, { useState, ReactElement, useEffect } from "react";
+import React, { useState, ReactElement, useEffect, useCallback } from "react";
 import { Button, Icon } from "semantic-ui-react";
+import { produce } from "immer";
 import TestSuiteComponent from "./TestSuite";
 import { TestSuite, Test } from "../types";
 import "semantic-ui-css/semantic.min.css";
@@ -28,7 +29,8 @@ const TestSuiteRunner = (
         test: Test;
         result: boolean;
         error: Error | null;
-        executionTime: number;
+        executionTime: number | null;
+        isRunning?: boolean;
       }[];
     }[]
   >([]);
@@ -38,6 +40,36 @@ const TestSuiteRunner = (
       setCurrentTestSuite(testSuites[0]);
     }
   }, [testSuites]);
+
+  const resetTestResults = useCallback(
+    (
+      testSuiteIndex,
+      testIndex,
+      completedTestSuite: {
+        name: string;
+        completedTests: {
+          test: Test;
+          result: boolean;
+          error: Error | null;
+          isRunning?: boolean;
+          executionTime: number | null;
+        }[];
+      }
+    ) => {
+      const newCompletedTestSuite = produce(completedTestSuite, (draft) => {
+        draft.completedTests[testIndex] = {
+          ...draft.completedTests[testIndex],
+          isRunning: true,
+          executionTime: null
+        };
+      });
+      const newCompletedTestSuites = produce(completedTestSuites, (draft) => {
+        draft[testSuiteIndex] = newCompletedTestSuite;
+      });
+      setCompletedTestSuites(newCompletedTestSuites);
+    },
+    [completedTestSuites]
+  );
 
   return (
     <div>
@@ -72,15 +104,34 @@ const TestSuiteRunner = (
               name={completedTestSuite.name}
               onRerun={() => {}}
               onRerunTest={async (test) => {
-                let context;
+                const testIndex = completedTestSuite.completedTests.findIndex(
+                  (t) => t.test.title === test.title
+                );
+                resetTestResults(index, testIndex, completedTestSuite);
                 const originalTestSuite = testSuites.find(
                   (t) => t.name === completedTestSuite.name
                 );
-                if (originalTestSuite?.beforeAll) {
-                  context = await originalTestSuite.beforeAll();
-                }
-                const executionResult = await runTest(test, context);
-                console.log(executionResult);
+
+                const executionResult = await executeTest(
+                  originalTestSuite!,
+                  test
+                );
+                const newCompletedTestSuite = produce(
+                  completedTestSuite,
+                  (draft) => {
+                    draft.completedTests[testIndex] = {
+                      ...draft.completedTests[testIndex],
+                      ...executionResult
+                    };
+                  }
+                );
+                const newCompletedTestSuites = produce(
+                  completedTestSuites,
+                  (draft) => {
+                    draft[index] = newCompletedTestSuite;
+                  }
+                );
+                setCompletedTestSuites(newCompletedTestSuites);
               }}
             />
           );
@@ -120,6 +171,17 @@ const TestSuiteRunner = (
       </div>
     </div>
   );
+};
+
+const executeTest = async (testSuite: TestSuite, test: Test) => {
+  let context;
+
+  if (testSuite?.beforeAll) {
+    context = await testSuite.beforeAll();
+  }
+  const executionResult = await runTest(test, context);
+
+  return executionResult;
 };
 
 export default TestSuiteRunner;
