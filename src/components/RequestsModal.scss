@@ -8,7 +8,7 @@
 }
 
 .requests-item {
-  max-height: 500px;
+  max-height: 900px;
   overflow: scroll;
 }
 
@@ -21,4 +21,19 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.request-tabs {
+  .menu {
+    position: sticky;
+    top: 0;
+    background-color: rgb(23, 20, 20) !important;
+  }
+}
+
+.ui.fullscreen.scrolling.modal.requests-modal {
+  left: 2.5% !important;
+  .icon {
+    color: rgba(255, 255, 255, 0.8) !important;
+  }
 }

@@ -38,6 +38,7 @@ const ControlBar = (): ReactElement<{}> => {
       </Menu.Item>
       <Menu.Item>
         <Input
+          className="app-loc-input"
           placeholder="App loc"
           value={appLoc}
           onChange={(_, data) => setAppLoc(data.value)}

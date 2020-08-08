@@ -25,7 +25,13 @@ const RequestsModal = (
   const config = adapter.getSasjsConfig();
   const [activeIndex, setActiveIndex] = useState(-1);
   return (
-    <Modal basic trigger={trigger}>
+    <Modal
+      basic
+      closeIcon
+      trigger={trigger}
+      size="fullscreen"
+      className="requests-modal"
+    >
       <Modal.Header>{config.debug ? "Last 20 requests" : ""}</Modal.Header>
       <Modal.Content>
         {config.debug ? (
@@ -52,6 +58,7 @@ const RequestsModal = (
                   <Accordion.Content active={activeIndex === index}>
                     <div className="requests-item">
                       <Tab
+                        className="request-tabs"
                         renderActiveOnly={true}
                         style={{ width: "100%" }}
                         menu={{
