@@ -45,6 +45,9 @@ const ControlBar = (): ReactElement<{}> => {
         />
       </Menu.Item>
       <Menu.Menu position="right">
+        <Button onClick={() => adapter.clearSasRequests()}>
+          Clear requests
+        </Button>
         <RequestsModal trigger={<Button>Requests</Button>} />
       </Menu.Menu>
     </Menu>
