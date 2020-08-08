@@ -13,6 +13,12 @@ interface TestSuiteRunnerProps {
   testSuites: TestSuite[];
 }
 
+async function asyncForEach(array: any[], callback: (...args: any[]) => any) {
+  for (let index = 0; index < array.length; index++) {
+    await callback(array[index], index, array);
+  }
+}
+
 const TestSuiteRunner = (
   props: TestSuiteRunnerProps
 ): ReactElement<TestSuiteRunnerProps> => {
@@ -41,6 +47,19 @@ const TestSuiteRunner = (
     }
   }, [testSuites]);
 
+  const resetTestSuiteResults = useCallback(
+    (testSuiteIndex) => {
+      const newCompletedTestSuites = produce(completedTestSuites, (draft) => {
+        draft[testSuiteIndex].completedTests.forEach((test) => {
+          test.isRunning = true;
+          test.executionTime = null;
+        });
+      });
+      setCompletedTestSuites(newCompletedTestSuites);
+    },
+    [completedTestSuites]
+  );
+
   const resetTestResults = useCallback(
     (
       testSuiteIndex,
@@ -67,6 +86,103 @@ const TestSuiteRunner = (
         draft[testSuiteIndex] = newCompletedTestSuite;
       });
       setCompletedTestSuites(newCompletedTestSuites);
+    },
+    [completedTestSuites]
+  );
+
+  const rerunTest = useCallback(
+    async (
+      test,
+      testSuiteIndex,
+      completedTestSuite: {
+        name: string;
+        completedTests: {
+          test: Test;
+          result: boolean;
+          error: Error | null;
+          isRunning?: boolean;
+          executionTime: number | null;
+        }[];
+      }
+    ) => {
+      const testIndex = completedTestSuite.completedTests.findIndex(
+        (t) => t.test.title === test.title
+      );
+      const originalTestSuite = testSuites.find(
+        (t) => t.name === completedTestSuite.name
+      );
+      const executionResult = await executeTest(originalTestSuite!, test);
+      const newCompletedTestSuite = produce(completedTestSuite, (draft) => {
+        draft.completedTests[testIndex] = {
+          ...draft.completedTests[testIndex],
+          ...executionResult,
+          isRunning: false
+        };
+      });
+      const newCompletedTestSuites = produce(completedTestSuites, (draft) => {
+        draft[testSuiteIndex] = newCompletedTestSuite;
+      });
+      setCompletedTestSuites(newCompletedTestSuites);
+    },
+    [completedTestSuites]
+  );
+
+  const rerunTestSuite = useCallback(
+    async (
+      testSuiteIndex: number,
+      completedTestSuite: {
+        name: string;
+        completedTests: {
+          test: Test;
+          result: boolean;
+          error: Error | null;
+          isRunning?: boolean;
+          executionTime: number | null;
+        }[];
+      }
+    ) => {
+      const originalTestSuite = testSuites.find(
+        (t) => t.name === completedTestSuite.name
+      );
+      const newCompletedTests: {
+        test: Test;
+        result: boolean;
+        error: Error | null;
+        isRunning?: boolean;
+        executionTime: number | null;
+      }[] = [];
+
+      await asyncForEach(
+        completedTestSuite.completedTests,
+        async (completedTest: {
+          test: Test;
+          result: boolean;
+          error: Error | null;
+          isRunning?: boolean;
+          executionTime: number | null;
+        }) => {
+          const result = await executeTest(
+            originalTestSuite!,
+            completedTest.test
+          );
+          newCompletedTests.push({
+            ...completedTest,
+            ...result,
+            isRunning: false
+          });
+
+          const newCompletedTestSuite = produce(completedTestSuite, (draft) => {
+            draft.completedTests = newCompletedTests;
+          });
+          const newCompletedTestSuites = produce(
+            completedTestSuites,
+            (draft) => {
+              draft[testSuiteIndex] = newCompletedTestSuite;
+            }
+          );
+          setCompletedTestSuites(newCompletedTestSuites);
+        }
+      );
     },
     [completedTestSuites]
   );
@@ -102,36 +218,17 @@ const TestSuiteRunner = (
               key={index}
               tests={completedTestSuite.completedTests}
               name={completedTestSuite.name}
-              onRerun={() => {}}
+              onRerun={async () => {
+                resetTestSuiteResults(index);
+                await rerunTestSuite(index, completedTestSuite);
+              }}
               onRerunTest={async (test) => {
                 const testIndex = completedTestSuite.completedTests.findIndex(
                   (t) => t.test.title === test.title
                 );
                 resetTestResults(index, testIndex, completedTestSuite);
-                const originalTestSuite = testSuites.find(
-                  (t) => t.name === completedTestSuite.name
-                );
 
-                const executionResult = await executeTest(
-                  originalTestSuite!,
-                  test
-                );
-                const newCompletedTestSuite = produce(
-                  completedTestSuite,
-                  (draft) => {
-                    draft.completedTests[testIndex] = {
-                      ...draft.completedTests[testIndex],
-                      ...executionResult
-                    };
-                  }
-                );
-                const newCompletedTestSuites = produce(
-                  completedTestSuites,
-                  (draft) => {
-                    draft[index] = newCompletedTestSuite;
-                  }
-                );
-                setCompletedTestSuites(newCompletedTestSuites);
+                await rerunTest(test, index, completedTestSuite);
               }}
             />
           );
