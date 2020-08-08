@@ -77,6 +77,6 @@
     "moment": "^2.27.0",
     "react-highlight.js": "^1.0.7",
     "semantic-ui-css": "^2.4.1",
-    "semantic-ui-react": "^1.0.0"
+    "semantic-ui-react": "^1.1.1"
   }
 }
