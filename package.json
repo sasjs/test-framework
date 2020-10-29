@@ -32,11 +32,11 @@
   },
   "peerDependencies": {
     "react": "^16.0.0",
-    "@sasjs/adapter": "^1.14.1",
+    "@sasjs/adapter": "^1.16.2",
     "react-dom": "^16.13.1"
   },
   "devDependencies": {
-    "@sasjs/adapter": "^1.14.1",
+    "@sasjs/adapter": "^1.16.2",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.0.4",
     "@types/jest": "^26.0.14",
