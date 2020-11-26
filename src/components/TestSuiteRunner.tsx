@@ -276,7 +276,7 @@ const executeTest = async (testSuite: TestSuite, test: Test) => {
   if (testSuite?.beforeAll) {
     context = await testSuite.beforeAll();
   }
-  const executionResult = await runTest(test, context);
+  const executionResult = await runTest(test, {data: context});
 
   return executionResult;
 };
