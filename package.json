@@ -2,7 +2,6 @@
   "name": "@sasjs/test-framework",
   "description": "A framework for running tests against a SAS server using SASjs",
   "author": "krishna-acondy",
-  "version": "1.0.0",
   "license": "ISC",
   "repository": "https://github.com/sasjs/test-framework",
   "main": "dist/index.js",
