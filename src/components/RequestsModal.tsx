@@ -34,7 +34,7 @@ const RequestsModal = (
 
   useEffect(() => {
     setRequests(adapter.getSasRequests());
-  });
+  }, []);
 
   return (
     <Modal
