@@ -3,7 +3,7 @@ import { Button, Icon } from "semantic-ui-react";
 import { produce } from "immer";
 import TestSuiteComponent from "./TestSuite";
 import { TestSuite, Test } from "../types";
-import "semantic-ui-css/semantic.min.css";
+
 import "./TestSuiteRunner.scss";
 import ControlBar from "./ControlBar";
 import TestSuiteCard from "./TestSuiteCard";
