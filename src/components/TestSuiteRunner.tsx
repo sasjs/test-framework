@@ -3,7 +3,6 @@ import { Button, Icon } from "semantic-ui-react";
 import { produce } from "immer";
 import TestSuiteComponent from "./TestSuite";
 import { TestSuite, Test } from "../types";
-
 import "./TestSuiteRunner.scss";
 import ControlBar from "./ControlBar";
 import TestSuiteCard from "./TestSuiteCard";
@@ -276,7 +275,7 @@ const executeTest = async (testSuite: TestSuite, test: Test) => {
   if (testSuite?.beforeAll) {
     context = await testSuite.beforeAll();
   }
-  const executionResult = await runTest(test, {data: context});
+  const executionResult = await runTest(test, { data: context });
 
   return executionResult;
 };
