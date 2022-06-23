@@ -28,8 +28,7 @@
     "test:unit": "cross-env CI=1 react-scripts test --env=jsdom",
     "test:watch": "react-scripts test --env=jsdom",
     "predeploy": "cd example && npm install && npm run build",
-    "deploy": "gh-pages -d example/build",
-    "postinstall": "semantic-ui-css-patch"
+    "deploy": "gh-pages -d example/build"
   },
   "peerDependencies": {
     "@sasjs/adapter": "^3.10.2",
@@ -74,12 +73,11 @@
     "dist"
   ],
   "dependencies": {
-    "@semantic-ui-react/css-patch": "^1.0.0",
     "@types/react-highlight.js": "^1.0.0",
     "immer": "^9.0.15",
     "moment": "^2.29.0",
     "react-highlight.js": "^1.0.0",
     "semantic-ui-css": "^2.4.1",
-    "semantic-ui-react": "2.0.4"
+    "semantic-ui-react": "^2.1.3"
   }
 }
