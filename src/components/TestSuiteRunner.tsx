@@ -7,6 +7,7 @@ import "./TestSuiteRunner.scss";
 import ControlBar from "./ControlBar";
 import TestSuiteCard from "./TestSuiteCard";
 import { runTest } from "../utils/runTest";
+import { Helmet } from "react-helmet";
 
 interface TestSuiteRunnerProps {
   testSuites: TestSuite[];
@@ -188,6 +189,12 @@ const TestSuiteRunner = (
 
   return (
     <div>
+      <Helmet>
+        <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css"
+        />
+      </Helmet>
       <ControlBar />
       <div className="button-container">
         {runTests ? (
