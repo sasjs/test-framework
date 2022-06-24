@@ -28,7 +28,9 @@
     "test:unit": "cross-env CI=1 react-scripts test --env=jsdom",
     "test:watch": "react-scripts test --env=jsdom",
     "predeploy": "cd example && npm install && npm run build",
-    "deploy": "gh-pages -d example/build"
+    "deploy": "gh-pages -d example/build",
+    "lint": "npx prettier --check \"src/**/*.{ts,tsx,js,jsx,html,css,sass,less,json,yml,md,graphql}\" && npx prettier --check \"sasjs-tests/src/**/*.{ts,tsx,js,jsx,html,css,sass,less,json,yml,md,graphql}\" && npx prettier --check \"cypress/**/*.{ts,tsx,js,jsx,html,css,sass,less,json,yml,md,graphql}\"",
+    "lint:fix": "npx prettier --loglevel silent --write \"src/**/*.{ts,tsx,js,jsx,html,css,sass,less,json,yml,md,graphql}\" && npx prettier --loglevel silent --write \"sasjs-tests/src/**/*.{ts,tsx,js,jsx,html,css,sass,less,json,yml,md,graphql}\" && npx prettier --loglevel silent --write \"cypress/**/*.{ts,tsx,js,jsx,html,css,sass,less,json,yml,md,graphql}\""
   },
   "peerDependencies": {
     "@sasjs/adapter": "^3.10.2",

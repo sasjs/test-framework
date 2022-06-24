@@ -1,29 +1,29 @@
-import React, { ReactElement, useContext, useState, useEffect } from "react";
-import { Menu, Checkbox, Input, Popup, Button } from "semantic-ui-react";
-import { AppContext } from "../context/AppContext";
-import RequestsModal from "./RequestsModal";
-import "./ControlBar.scss";
+import React, { ReactElement, useContext, useState, useEffect } from 'react'
+import { Menu, Checkbox, Input, Popup, Button } from 'semantic-ui-react'
+import { AppContext } from '../context/AppContext'
+import RequestsModal from './RequestsModal'
+import './ControlBar.scss'
 
 const ControlBar = (): ReactElement<{}> => {
-  const { adapter, config } = useContext(AppContext);
-  const [appLoc, setAppLoc] = useState("");
-  const [debug, setDebug] = useState(false);
+  const { adapter, config } = useContext(AppContext)
+  const [appLoc, setAppLoc] = useState('')
+  const [debug, setDebug] = useState(false)
 
   useEffect(() => {
     if (adapter) {
-      adapter.setDebugState(debug);
+      adapter.setDebugState(debug)
     }
-  }, [debug, adapter, config]);
+  }, [debug, adapter, config])
 
   useEffect(() => {
     if (appLoc && adapter) {
-      adapter.setSASjsConfig({ ...adapter.getSasjsConfig(), appLoc });
+      adapter.setSASjsConfig({ ...adapter.getSasjsConfig(), appLoc })
     }
-  }, [appLoc, adapter]);
+  }, [appLoc, adapter])
 
   useEffect(() => {
-    setAppLoc(adapter.getSasjsConfig().appLoc);
-  }, [adapter]);
+    setAppLoc(adapter.getSasjsConfig().appLoc)
+  }, [adapter])
 
   return (
     <Menu attached="top" inverted color="blue" className="control-bar">
@@ -51,7 +51,7 @@ const ControlBar = (): ReactElement<{}> => {
         <RequestsModal trigger={<Button>Requests</Button>} />
       </Menu.Menu>
     </Menu>
-  );
-};
+  )
+}
 
-export default ControlBar;
+export default ControlBar

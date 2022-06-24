@@ -4,37 +4,37 @@ import React, {
   useState,
   useContext,
   useEffect
-} from "react";
-import { Modal, Accordion, Tab, Icon } from "semantic-ui-react";
-import Highlight from "react-highlight.js";
-import moment from "moment";
-import "./syntax-highlighting.css";
-import "./RequestsModal.scss";
-import { AppContext } from "../context/AppContext";
-import { SASjsRequest } from "@sasjs/adapter";
+} from 'react'
+import { Modal, Accordion, Tab, Icon } from 'semantic-ui-react'
+import Highlight from 'react-highlight.js'
+import moment from 'moment'
+import './syntax-highlighting.css'
+import './RequestsModal.scss'
+import { AppContext } from '../context/AppContext'
+import { SASjsRequest } from '@sasjs/adapter'
 
 interface RequestsModalProps {
-  trigger: ReactNode;
+  trigger: ReactNode
 }
 
 const decodeHtml = (encodedString: string): string => {
-  const tempElement = document.createElement("textarea");
-  tempElement.innerHTML = encodedString;
-  return tempElement.value;
-};
+  const tempElement = document.createElement('textarea')
+  tempElement.innerHTML = encodedString
+  return tempElement.value
+}
 
 const RequestsModal = (
   props: RequestsModalProps
 ): ReactElement<RequestsModalProps> => {
-  const { trigger } = props;
-  const { adapter } = useContext(AppContext);
-  const [requests, setRequests] = useState<SASjsRequest[]>([]);
-  const config = adapter.getSasjsConfig();
-  const [activeIndex, setActiveIndex] = useState(-1);
+  const { trigger } = props
+  const { adapter } = useContext(AppContext)
+  const [requests, setRequests] = useState<SASjsRequest[]>([])
+  const config = adapter.getSasjsConfig()
+  const [activeIndex, setActiveIndex] = useState(-1)
 
   useEffect(() => {
-    setRequests(adapter.getSasRequests());
-  }, []);
+    setRequests(adapter.getSasRequests())
+  }, [])
 
   return (
     <Modal
@@ -45,7 +45,7 @@ const RequestsModal = (
       size="fullscreen"
       className="requests-modal"
     >
-      <Modal.Header>{config.debug ? "Last 20 requests" : ""}</Modal.Header>
+      <Modal.Header>{config.debug ? 'Last 20 requests' : ''}</Modal.Header>
       <Modal.Content>
         {config.debug ? (
           requests && requests.length ? (
@@ -64,7 +64,7 @@ const RequestsModal = (
                       {`${request.serviceLink}  `}
                       <span className="request-timestamp">
                         {moment(request.timestamp).format(
-                          "dddd, MMMM Do YYYY, h:mm:ss a"
+                          'dddd, MMMM Do YYYY, h:mm:ss a'
                         )}
                         {` (${moment(request.timestamp).fromNow()})`}
                       </span>
@@ -74,7 +74,7 @@ const RequestsModal = (
                         <Tab
                           className="request-tabs"
                           renderActiveOnly={true}
-                          style={{ width: "100%" }}
+                          style={{ width: '100%' }}
                           menu={{
                             fluid: true,
                             secondary: true,
@@ -82,25 +82,25 @@ const RequestsModal = (
                           }}
                           panes={[
                             {
-                              menuItem: "Log",
+                              menuItem: 'Log',
                               render: () => (
-                                <Highlight language={"html"}>
+                                <Highlight language={'html'}>
                                   {decodeHtml(request.logFile)}
                                 </Highlight>
                               )
                             },
                             {
-                              menuItem: "Source Code",
+                              menuItem: 'Source Code',
                               render: () => (
-                                <Highlight language={"SAS"}>
+                                <Highlight language={'SAS'}>
                                   {decodeHtml(request.sourceCode)}
                                 </Highlight>
                               )
                             },
                             {
-                              menuItem: "Generated Code",
+                              menuItem: 'Generated Code',
                               render: () => (
-                                <Highlight language={"SAS"}>
+                                <Highlight language={'SAS'}>
                                   {decodeHtml(request.generatedCode)}
                                 </Highlight>
                               )
@@ -110,7 +110,7 @@ const RequestsModal = (
                       </div>
                     </Accordion.Content>
                   </div>
-                );
+                )
               })}
             </Accordion>
           ) : (
@@ -129,7 +129,7 @@ const RequestsModal = (
         )}
       </Modal.Content>
     </Modal>
-  );
-};
+  )
+}
 
-export default React.memo(RequestsModal);
+export default React.memo(RequestsModal)
