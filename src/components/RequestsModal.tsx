@@ -6,7 +6,7 @@ import React, {
   useEffect
 } from 'react'
 import { Modal, Accordion, Tab, Icon } from 'semantic-ui-react'
-import Highlight from 'react-highlight.js'
+import SyntaxHighlighter from 'react-syntax-highlighter'
 import moment from 'moment'
 import './syntax-highlighting.css'
 import './RequestsModal.scss'
@@ -73,7 +73,7 @@ const RequestsModal = (
                       <div className="requests-item">
                         <Tab
                           className="request-tabs"
-                          renderActiveOnly={true}
+                          renderActiveOnly
                           style={{ width: '100%' }}
                           menu={{
                             fluid: true,
@@ -84,29 +84,29 @@ const RequestsModal = (
                             {
                               menuItem: 'Log',
                               render: () => (
-                                <Highlight language={'html'}>
+                                <SyntaxHighlighter language="html">
                                   {decodeHtml(request.logFile)}
-                                </Highlight>
+                                </SyntaxHighlighter>
                               )
                             },
                             {
                               menuItem: 'Source Code',
                               render: () => (
-                                <Highlight language={'SAS'}>
+                                <SyntaxHighlighter language="sas">
                                   {decodeHtml(request.sourceCode)}
-                                </Highlight>
+                                </SyntaxHighlighter>
                               )
                             },
                             {
                               menuItem: 'Generated Code',
                               render: () => (
-                                <Highlight language={'SAS'}>
+                                <SyntaxHighlighter language="sas">
                                   {decodeHtml(request.generatedCode)}
-                                </Highlight>
+                                </SyntaxHighlighter>
                               )
                             }
                           ]}
-                        ></Tab>
+                        />
                       </div>
                     </Accordion.Content>
                   </div>
@@ -115,14 +115,14 @@ const RequestsModal = (
             </Accordion>
           ) : (
             <div className="debug-message">
-              <Icon name="bug" size="huge" inverted></Icon>
+              <Icon name="bug" size="huge" inverted />
               <h3>There are no requests available.</h3>
               <span>Please run a test and check again.</span>
             </div>
           )
         ) : (
           <div className="debug-message">
-            <Icon name="bug" size="huge" inverted></Icon>
+            <Icon name="bug" size="huge" inverted />
             <h3>There is no debug information available.</h3>
             <span>Please turn on debug and re-run your tests.</span>
           </div>
