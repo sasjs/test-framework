@@ -33,12 +33,12 @@
     "lint:fix": "npx prettier --loglevel silent --write \"src/**/*.{ts,tsx,js,jsx,html,css,sass,less,json,yml,md,graphql}\" && npx prettier --loglevel silent --write \"sasjs-tests/src/**/*.{ts,tsx,js,jsx,html,css,sass,less,json,yml,md,graphql}\" && npx prettier --loglevel silent --write \"cypress/**/*.{ts,tsx,js,jsx,html,css,sass,less,json,yml,md,graphql}\""
   },
   "peerDependencies": {
-    "@sasjs/adapter": "^4.0.0",
+    "@sasjs/adapter": "^4.8.0",
     "react": "^16.0.0",
     "react-dom": "^16.13.1"
   },
   "devDependencies": {
-    "@sasjs/adapter": "4.0.0",
+    "@sasjs/adapter": "^4.8.0",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^12.0.0",
     "@testing-library/user-event": "^13.2.1",
