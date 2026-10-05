@@ -13,7 +13,9 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [lts/fermium]
+        # The manifest declares node >= 22, so the floor is what gets tested.
+        # lts/fermium was node 14.
+        node-version: [22, lts/*]
 
     steps:
       - uses: actions/checkout@v2
