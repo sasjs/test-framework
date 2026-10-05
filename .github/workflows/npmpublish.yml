@@ -14,7 +14,9 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [lts/fermium]
+        # Single entry on purpose: this job releases, so a second matrix entry
+        # would run semantic-release twice against the same commit.
+        node-version: [22]
 
     steps:
       - name: Checkout

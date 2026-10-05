@@ -8,7 +8,7 @@
   "module": "dist/index.modern.js",
   "source": "src/index.tsx",
   "engines": {
-    "node": ">=10"
+    "node": ">=22"
   },
   "release": {
     "branches": [
@@ -64,7 +64,6 @@
     "eslint-plugin-standard": "^4.0.1",
     "gh-pages": "^3.1.0",
     "microbundle-crl": "0.13.10",
-    "node-sass": "7.0.3",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.1.2",
     "react": "^17.0.1",
